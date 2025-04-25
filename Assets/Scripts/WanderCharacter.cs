@@ -20,7 +20,7 @@ public class WanderCharacter : MonoBehaviour
 
         if (OccupiedMapManager.Instance == null)
         {
-            Debug.LogError("OccupiedMapManagerがまだ初期化されていません！");
+            Debug.LogError("OccupiedMapManagerがまだ初期化されてない");
         }        
     }
 

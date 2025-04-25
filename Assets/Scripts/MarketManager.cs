@@ -49,26 +49,25 @@ public class MarketManager : MonoBehaviour
 
         if (prefab == null)
         {
-            Debug.LogError("プレハブが見つかりません！");
             return;
         }
 
-        // 空いている販売台（stall）を探す
+        // 空いているstallを探す
         foreach (Transform stall in stallPositions)
         {
             if (stall.childCount == 0)
             {
-                // ★販売台にプレハブを並べる
+                // プレハブを並べる
                 GameObject newItem = Instantiate(prefab, stall.position, Quaternion.identity, stall);
 
-                // ★販売リストにも登録（これが重要！）
+                // 販売リストに登録
                 itemsOnSale.Add(newItem);
 
-                return; // 最初に空いていた台に置けたらそこで終わり
+                return;
             }
         }
 
-        Debug.LogWarning("販売所に空きがありません！");
+        Debug.LogWarning("販売所に空きがない");
         StartCoroutine(ShowMessageController.Instance.ShowMessage(noSpaceMessage, 1.3f));
     }
 
@@ -76,14 +75,14 @@ public class MarketManager : MonoBehaviour
     {
         if (itemsOnSale.Count == 0)
         {
-            Debug.Log("売れるアイテムがない！");
+            Debug.Log("売れるアイテムがない");
             return;
         }
 
         var item = itemsOnSale[0];
         itemsOnSale.RemoveAt(0);
 
-        int sellPrice = 100; // デフォルト
+        int sellPrice = 100;
 
         var marketItem = item.GetComponent<MarketItem>();
         if (marketItem != null)
@@ -100,7 +99,7 @@ public class MarketManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("MarketItemコンポーネントが付いてないのでデフォルト価格で販売します！");
+            Debug.LogWarning("MarketItemコンポーネントが無い");
         }
 
         Destroy(item);
@@ -109,7 +108,7 @@ public class MarketManager : MonoBehaviour
         Parameter.soldVegetableCount += 1;
         AudioController.Instance.PlaySE("販売", 0.2f);
 
-        Debug.Log($"🛒 {marketItem?.vegetableType} を {sellPrice} 円で売却！");
+        Debug.Log($"{marketItem?.vegetableType} を {sellPrice} 円で売却");
     }
 
     // アイテムを予約してリストから外す
@@ -129,7 +128,7 @@ public class MarketManager : MonoBehaviour
         if (item == null)
             return;
 
-        int sellPrice = 100; // デフォルト
+        int sellPrice = 100;
 
         var marketItem = item.GetComponent<MarketItem>();
         if (marketItem != null)
@@ -153,7 +152,7 @@ public class MarketManager : MonoBehaviour
         Parameter.soldVegetableCount += 1;
         AudioController.Instance.PlaySE("販売", 0.2f);
 
-        Debug.Log($"🛒 {marketItem.vegetableType} を {sellPrice} 円で売却！");
+        Debug.Log($"{marketItem.vegetableType} を {sellPrice} 円で売却！");
     }
 
     public float GetLastStallX()
@@ -169,7 +168,7 @@ public class MarketManager : MonoBehaviour
 
         foreach (Transform stall in stallPositions)
         {
-            // ★子供（野菜）がいるStallだけ対象にする！
+            // 子オブジェクトの野菜があるStallだけ対象にする
             if (stall.childCount > 0)
             {
                 float distance = Mathf.Abs(customerX - stall.position.x);

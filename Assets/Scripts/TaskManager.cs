@@ -7,7 +7,7 @@ public class TaskManager : MonoBehaviour
 
     private List<WorkerController> workers = new List<WorkerController>();
 
-    private Queue<TaskData> taskQueue = new Queue<TaskData>(); // ★追加！
+    private Queue<TaskData> taskQueue = new Queue<TaskData>();
 
     void Awake()
     {
@@ -39,43 +39,42 @@ public class TaskManager : MonoBehaviour
 
     public bool AssignTask(TaskData task)
     {
-        Debug.Log($"🌾 TaskManager: タスク登録開始！タスクタイプ: {task.taskType} ターゲットセル: {task.targetCell}");
+        Debug.Log($"TaskManager: タスク登録開始、タスクタイプ: {task.taskType} ターゲットセル: {task.targetCell}");
 
         foreach (var worker in workers)
         {
-            Debug.Log($"🌾 TaskManager: Worker {worker.name} を確認中");
+            Debug.Log($"TaskManager: Worker {worker.name} を確認中");
 
             bool available = worker.IsAvailable();
 
-            // 🌟 Move中なら特別に受け付ける！
+            // Move中だけ他タスク受け付ける
             bool moveInProgress = worker.IsMoving();
 
-            Debug.Log($"🌾 TaskManager: Worker {worker.name} isAvailable={available}, isMoving={moveInProgress}");
+            Debug.Log($"TaskManager: Worker {worker.name} isAvailable={available}, isMoving={moveInProgress}");
 
             if (available || moveInProgress)
             {
-                Debug.Log($"🌾 TaskManager: Worker {worker.name} にタスク割り当てます！");
-                worker.SetTask(task);  // ★ここで普通に渡す
+                Debug.Log($"TaskManager: Worker {worker.name} にタスク割り当て");
+                worker.SetTask(task);
                 return true;
             }
         }
 
-        Debug.LogWarning("🌾 TaskManager: 作業可能なWorkerがいなかった！");
+        Debug.LogWarning("TaskManager: 作業可能なWorkerがいない");
         return false;
     }
 
     public void ForceAllWorkersGoHome()
     {
-        Debug.Log("🏠 ForceAllWorkersGoHome: 全Workerに帰宅命令！");
+        Debug.Log("ForceAllWorkersGoHome: Woker帰宅");
 
         foreach (var worker in workers)
         {
             if (worker != null)
             {
-                // ★ ここでタスクをリセット！
                 worker.ResetTask();
 
-                // ★ それからGoHomeタスクを強制割り当て
+                // GoHomeタスク割り当て
                 Vector3Int homeCell = new Vector3Int(25, 25, 0);
                 worker.SetTask(new TaskData(TaskType.GoHome, homeCell), force: true);
             }

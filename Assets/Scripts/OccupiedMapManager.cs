@@ -28,7 +28,7 @@ public class OccupiedMapManager : MonoBehaviour
     {
         occupiedMap.Clear();
 
-        // "Obstacle" タグのオブジェクトを全て取得
+        // Obstacleタグのオブジェクトを全て取得
         GameObject[] obstacles = GameObject.FindGameObjectsWithTag("Obstacle");
 
         foreach (GameObject obj in obstacles)
@@ -43,15 +43,13 @@ public class OccupiedMapManager : MonoBehaviour
             }
         }
 
-        Debug.Log($"OccupiedMap 作成完了：{occupiedMap.Count} タイルが占有中");
+        Debug.Log($"OccupiedMap作成完了：{occupiedMap.Count} タイルが占有中");
     }
 
-    /// <summary>
-    /// 指定セルが占有されているか
-    /// </summary>
+    // 指定セルの占有チェック
     public bool IsCellOccupied(Vector3Int cellPos)
     {
-        // 🌊 まず池タイルなら常に占有扱い
+        // 池タイルなら常に占有扱い
         if (IsPondTile(cellPos))
             return true;
 
@@ -71,15 +69,13 @@ public class OccupiedMapManager : MonoBehaviour
             occupiedMap.Remove(cell);
     }
 
-    /// <summary>
-    /// セルが池タイルかどうか判定する
-    /// </summary>
+    // 池タイルチェック
     private bool IsPondTile(Vector3Int cell)
     {
         TileBase tile = tilemap.GetTile(cell);
         if (tile == null) return false;
 
-        return tile.name == "mapchip_01_80"; // 水タイル
+        return tile.name == "mapchip_01_80"; // 池タイルのファイル名
     }
 
     public bool IsPondCell(Vector3Int cellPos)
@@ -87,6 +83,6 @@ public class OccupiedMapManager : MonoBehaviour
         TileBase tile = TilemapReference.Instance.tilemap.GetTile(cellPos);
         if (tile == null) return false;
 
-        return tile.name == "mapchip_01_80"; // 水タイル
+        return tile.name == "mapchip_01_80";
     }
 }

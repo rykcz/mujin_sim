@@ -34,8 +34,6 @@ public class CustomerController : MonoBehaviour
         // まだ販売所を通過してないならチェックする
         if (!hasPassedShop)
         {
-            // CheckStallProximity();
-
             float customerX = transform.position.x;
             Transform nearestStall = MarketManager.Instance.GetNearestStall(customerX);
 
@@ -43,7 +41,7 @@ public class CustomerController : MonoBehaviour
             {
                 float stallX = nearestStall.position.x;
 
-                // ❗ ここで都度最新のstallXを取ってくる！
+                // 最新のstallXを毎回取得
                 if (Mathf.Abs(customerX - stallX) < sellChance)
                 {
                     hasPassedShop = true;
@@ -55,7 +53,7 @@ public class CustomerController : MonoBehaviour
                     }
                     else
                     {
-                        Debug.Log("🚶 通行人は素通りしました！");
+                        Debug.Log("通行人は素通りした");
                     }
                 }
             }
@@ -82,7 +80,7 @@ public class CustomerController : MonoBehaviour
 
         if (reservedItem == null)
         {
-            Debug.LogWarning("🛒 購入できるアイテムがありませんでした！");
+            Debug.LogWarning("購入できるアイテムが無い");
             isBuying = false;
             yield break;
         }

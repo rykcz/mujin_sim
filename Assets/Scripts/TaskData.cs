@@ -4,7 +4,7 @@ using UnityEngine;
 public enum TaskType
 {
     None,
-    Till,   // 耕す
+    Till,
     PlantCabbage,
     PlantTomato,
     Water,

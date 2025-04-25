@@ -17,7 +17,7 @@ public class GameTimeManager : MonoBehaviour
     [Header("UI")]
     public Image speedImage;
 
-    // ★ 追加：Workerを覚えておくリスト
+    // Worker用リスト
     private List<WorkerController> allWorkers = new List<WorkerController>();
 
     private void Awake()
@@ -27,7 +27,7 @@ public class GameTimeManager : MonoBehaviour
         else
             Destroy(gameObject);
 
-        // ★ Awakeで全Workerを覚える！（非アクティブも含む）
+        // 全Workerを確認
         allWorkers.AddRange(FindObjectsOfType<WorkerController>(true));
     }
 
@@ -38,7 +38,7 @@ public class GameTimeManager : MonoBehaviour
 
     private void Update()
     {
-        // スタート時の説明中なら時間制御も進行もスキップ
+        // スタート時の説明中は時間制御も進行もスキップ
         if (GameExplanationManager.Instance != null && GameExplanationManager.Instance.IsDuringExplanation())
         {
             return;
@@ -113,9 +113,7 @@ public class GameTimeManager : MonoBehaviour
 
     private void StartNewDay()
     {
-        // Debug.Log("🌅 新しい日が始まりました！（水やりリセット＆Worker復活）");
-
-        // 作物すべてに NewDay() を通知
+        // 作物すべてに NewDay渡す
         VegetableGrowth[] crops = FindObjectsOfType<VegetableGrowth>();
         foreach (var crop in crops)
         {
@@ -123,16 +121,15 @@ public class GameTimeManager : MonoBehaviour
         }
 
         // Worker復活
-        foreach (var worker in allWorkers) // ★リストから復活！
+        foreach (var worker in allWorkers)
         {
             if (worker == null) continue;
 
-            worker.gameObject.SetActive(true); // まず表示
+            worker.gameObject.SetActive(true); // 表示
 
-            // ここで状態リセット
-            worker.ResetTask();  // ←★追加！タスク情報などを初期化する
+            // 状態リセット
+            worker.ResetTask();  // タスク情報など初期化
 
-            // そしてフェードインさせる
             var fade = worker.GetComponent<WorkerFadeController>();
             if (fade != null)
             {

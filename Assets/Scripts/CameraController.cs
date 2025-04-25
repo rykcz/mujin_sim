@@ -17,7 +17,7 @@ public class CameraController : MonoBehaviour
     private float lastTapTime = 0f;
     private float doubleTapThreshold = 0.3f; // ダブルタップ認識時間
 
-    // カメラをドラッグ移動できる範囲（例：X -10〜10, Y -5〜5）
+    // カメラをドラッグ移動できる範囲
     public Vector2 minPosition = new Vector2(-10f, -5f);
     public Vector2 maxPosition = new Vector2(10f, 15f);
 

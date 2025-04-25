@@ -27,7 +27,7 @@ public class SimpleAStar
         {
             if (searchCount++ > maxSearchCount)
             {
-                Debug.LogError("❌ A*探索が上限に達しました！");
+                Debug.LogError("Astar探索上限");
                 return null;
             }
 
@@ -64,12 +64,12 @@ public class SimpleAStar
                     cameFrom[neighbor] = current;
                     gScore[neighbor] = tentativeG;
                     int fScore = tentativeG + Heuristic(neighbor, goal);
-                    openSet.Enqueue(neighbor, fScore); // ★距離順に追加するから正しく探索続行できる！
+                    openSet.Enqueue(neighbor, fScore);
                 }
             }
         }
 
-        Debug.LogWarning("❌ パスが見つかりませんでした！");
+        Debug.LogWarning("パスが見つからない");
         return null;
     }
 

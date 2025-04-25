@@ -53,7 +53,7 @@ public class TileSelector : MonoBehaviour
         mainCamera = Camera.main;
         if (mouseIcon != null)
         {
-            mouseIcon.gameObject.SetActive(false);  // 最初は非表示にしておく
+            mouseIcon.gameObject.SetActive(false);
         }
 
         stillWorkingMessage.SetActive(false);
@@ -69,7 +69,7 @@ public class TileSelector : MonoBehaviour
         {
             if (EventSystem.current.IsPointerOverGameObject())
             {
-                Debug.Log("UI上なのでタイルクリック無効！");
+                Debug.Log("UI上なのでタイルクリック無効");
                 return;
             }
 
@@ -78,7 +78,7 @@ public class TileSelector : MonoBehaviour
 
             if (mainCamera == null)
             {
-                Debug.LogError("❌ mainCameraがnullです！");
+                Debug.LogError("mainCameraがnull");
                 return;
             }
 
@@ -87,7 +87,7 @@ public class TileSelector : MonoBehaviour
 
             if (TilemapReference.Instance.tilemap.GetTile(cellPos) == null)
             {
-                Debug.LogWarning("タイルがない場所をクリックしました。何もしません。");
+                Debug.LogWarning("タイルがない場所をクリック");
                 // SetMouseIcon(null);
                 return;
             }
@@ -168,7 +168,7 @@ public class TileSelector : MonoBehaviour
     private bool CanPlantAt(Vector3Int cell)
     {
         if (OccupiedMapManager.Instance.IsCellOccupied(cell))
-            return false; // 占有セル（池含む）には植えない！
+            return false; // 占有セル（池含む）には植えない
 
         return !VegetableMapManager.Instance.HasVegetable(cell);
     }
@@ -178,7 +178,7 @@ public class TileSelector : MonoBehaviour
         TileBase tile = TilemapReference.Instance.tilemap.GetTile(cell);
         if (tile == null) return false;
 
-        return tile.name == "mapchip_01_7"; //土タイル
+        return tile.name == "mapchip_01_7"; // 土タイル
     }
 
     private bool IsWastelandTile(Vector3Int cell)
@@ -186,7 +186,7 @@ public class TileSelector : MonoBehaviour
         TileBase tile = TilemapReference.Instance.tilemap.GetTile(cell);
         if (tile == null) return false;
 
-        return tile.name == "mapchip_01_1"; //荒地タイル
+        return tile.name == "mapchip_01_1"; // 荒地タイル
     }
 
     private void ExecuteCommand(Vector3Int cell)
@@ -195,12 +195,12 @@ public class TileSelector : MonoBehaviour
         TileBase clickedTile = TilemapReference.Instance.tilemap.GetTile(cell);
         if (clickedTile != null)
         {
-            Debug.Log($"🧱 クリックしたタイルの名前: {clickedTile.name}");
+            Debug.Log($"クリックしたタイルの名前: {clickedTile.name}");
         }
 
         if (!IsInsideValidArea(cell))
         {
-            Debug.LogWarning("⚠️ 範囲外のタイルです！タスク実行できません！");
+            Debug.LogWarning("範囲外のタイル");
             ShowErrorIcon();
             StartCoroutine(ShowMessageController.Instance.ShowMessage(cantDoMessage, 1.3f));
             return;
@@ -208,7 +208,7 @@ public class TileSelector : MonoBehaviour
 
         if (OccupiedMapManager.Instance.IsPondCell(cell))
         {
-            Debug.LogWarning("⚠️ 池タイルなので作業できません！");
+            Debug.LogWarning("池タイルなので作業不可");
             ShowErrorIcon();
             StartCoroutine(ShowMessageController.Instance.ShowMessage(cantDoMessage, 1.3f));
             return;
@@ -219,7 +219,7 @@ public class TileSelector : MonoBehaviour
         switch (currentMode)
         {
             case CommandMode.Till:
-                if (!IsWastelandTile(cell)) //荒地タイル以外で実行不可
+                if (!IsWastelandTile(cell)) //荒地タイル以外では実行不可
                 {
                     ShowErrorIcon();
                     return;
@@ -230,25 +230,25 @@ public class TileSelector : MonoBehaviour
             case CommandMode.PlantCabbage:
                 if (!IsSoilTile(cell))
                 {
-                    Debug.LogWarning("⚠️ 土の上でないので種まきできません！");
+                    Debug.LogWarning("土の上でないので種まき不可");
                     ShowErrorIcon();
                     StartCoroutine(ShowMessageController.Instance.ShowMessage(cantDoMessage, 1.3f));
                     break;
                 }
                 if (!CanPlantAt(cell))
                 {
-                    Debug.LogWarning("⚠️ すでに野菜があります！");
+                    Debug.LogWarning("すでに野菜が存在");
                     ShowErrorIcon();
                     StartCoroutine(ShowMessageController.Instance.ShowMessage(cantDoMessage, 1.3f));
                     break;
                 }
-                if (SeedInventory.Instance.cabbageSeedCount > 0)  // ★ここで数だけ確認
+                if (SeedInventory.Instance.cabbageSeedCount > 0)  // ここで数だけ確認
                 {
                     taskAssigned = TaskManager.Instance.AssignTask(new TaskData(TaskType.PlantCabbage, cell));
                 }
                 else
                 {
-                    Debug.Log("キャベツの種が足りません！");
+                    Debug.Log("キャベツの種が不足");
                     ShowErrorIcon();
                     StartCoroutine(ShowMessageController.Instance.ShowMessage(emptySeedMessage, 1.3f));
                 }
@@ -257,25 +257,25 @@ public class TileSelector : MonoBehaviour
             case CommandMode.PlantTomato:
                 if (!IsSoilTile(cell))
                 {
-                    Debug.LogWarning("⚠️ 土の上でないので種まきできません！");
+                    Debug.LogWarning("土の上でないので種まき不可");
                     ShowErrorIcon();
                     StartCoroutine(ShowMessageController.Instance.ShowMessage(cantDoMessage, 1.3f));
                     break;
                 }
                 if (!CanPlantAt(cell))
                 {
-                    Debug.LogWarning("⚠️ すでに野菜があります！");
+                    Debug.LogWarning("すでに野菜が存在");
                     ShowErrorIcon();
                     StartCoroutine(ShowMessageController.Instance.ShowMessage(cantDoMessage, 1.3f));
                     break;
                 }
-                if (SeedInventory.Instance.tomatoSeedCount > 0)  // ★ここも同じ
+                if (SeedInventory.Instance.tomatoSeedCount > 0)
                 {
                     taskAssigned = TaskManager.Instance.AssignTask(new TaskData(TaskType.PlantTomato, cell));
                 }
                 else
                 {
-                    Debug.Log("トマトの種が足りません！");
+                    Debug.Log("トマトの種が不足");
                     ShowErrorIcon();
                     StartCoroutine(ShowMessageController.Instance.ShowMessage(emptySeedMessage, 1.3f));
                 }
@@ -283,11 +283,11 @@ public class TileSelector : MonoBehaviour
 
             case CommandMode.Harvest:
             
-                // ★ 野菜が存在しない or 成長してないなら収穫不可
+                // 野菜が存在しない又は成長してないなら収穫不可
                 VegetableGrowth veg = VegetableMapManager.Instance.GetVegetable(cell);
                 if (veg == null || !veg.IsFullyGrown())
                 {
-                    Debug.LogWarning("⚠️ 成長した野菜がないので収穫できません！");
+                    Debug.LogWarning("成長した野菜がないので収穫不可");
                     ShowErrorIcon();
                     StartCoroutine(ShowMessageController.Instance.ShowMessage(cantDoMessage, 1.3f));
                     break;
@@ -296,7 +296,7 @@ public class TileSelector : MonoBehaviour
                 // ★ 販売所に空きがないなら収穫不可
                 if (MarketManager.Instance.GetFreeStallCount() <= 0)
                 {
-                    Debug.LogWarning("⚠️ 販売所に空きがないので収穫できません！");
+                    Debug.LogWarning("販売所に空きがないので収穫不可");
                     ShowErrorIcon();
                     StartCoroutine(ShowMessageController.Instance.ShowMessage(noSpaceMessage, 1.3f));
                     break;
@@ -304,18 +304,18 @@ public class TileSelector : MonoBehaviour
 
                 if (!VegetableMapManager.Instance.HasVegetable(cell))
                 {
-                    Debug.LogWarning("⚠️ 収穫できる野菜がいません！");
+                    Debug.LogWarning("収穫できる野菜が存在しない");
                     ShowErrorIcon();
                     StartCoroutine(ShowMessageController.Instance.ShowMessage(cantDoMessage, 1.3f));
                     return; // ★ここでreturnしてタスク登録を防ぐ！
                 }
 
-                Debug.Log($"🌾 Harvestタスクを登録！ターゲットセル: {cell}");
+                Debug.Log($"Harvestタスクを登録、ターゲットセル: {cell}");
                 taskAssigned = TaskManager.Instance.AssignTask(new TaskData(TaskType.Harvest, cell));
                 break;
                 
             case CommandMode.Move:
-                Debug.Log($"🚶 Moveタスクを登録！ターゲットセル: {cell}");
+                Debug.Log($"Moveタスクを登録、ターゲットセル: {cell}");
                 taskAssigned = TaskManager.Instance.AssignTask(new TaskData(TaskType.Move, cell));
                 break;
 
@@ -323,7 +323,7 @@ public class TileSelector : MonoBehaviour
 
         if (!taskAssigned && currentMode != CommandMode.None)
         {
-            Debug.LogWarning("作業可能なバイトがいません！");
+            Debug.LogWarning("作業可能なバイトが存在しない");
             ShowErrorIcon();
             StartCoroutine(ShowMessageController.Instance.ShowMessage(stillWorkingMessage, 1.3f));
         }
@@ -351,11 +351,11 @@ public class TileSelector : MonoBehaviour
 
         yield return new WaitForSeconds(errorDisplayTime);
 
-        // ★エラー表示が終わったあと、今のcurrentModeに応じて再設定
+        // エラー表示が終わったら今のcurrentModeに応じて再設定
         SetMouseIcon(GetSpriteForCurrentMode());
     }
 
-    // タスクモードに応じたスプライトを返すメソッドを作っておく
+    // タスクモードに応じたスプライトを返す
     private Sprite GetSpriteForCurrentMode()
     {
         switch (currentMode)

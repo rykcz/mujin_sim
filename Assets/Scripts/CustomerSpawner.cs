@@ -11,8 +11,8 @@ public class CustomerSpawner : MonoBehaviour
     private float nextSpawnTime;
 
     [Header("出現位置とゴール位置")]
-    public Transform spawnPoint;   // ここから出現
-    public Transform goalPoint;    // ここに向かう
+    public Transform spawnPoint;   // スポーン位置
+    public Transform goalPoint;    // 目標位置
 
     private void Start()
     {
@@ -35,7 +35,7 @@ public class CustomerSpawner : MonoBehaviour
     {
         if (customerPrefab == null || spawnPoint == null || goalPoint == null)
         {
-            Debug.LogError("🚨 CustomerSpawnerに必要な設定がありません！");
+            Debug.LogError("CustomerSpawnerに必要な設定がない");
             return;
         }
 
@@ -44,7 +44,7 @@ public class CustomerSpawner : MonoBehaviour
 
         if (controller != null)
         {
-            controller.SetGoal(goalPoint.position); // 出現後にゴール設定！
+            controller.SetGoal(goalPoint.position); // 出現後にゴール設定
         }
     }
 

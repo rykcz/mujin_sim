@@ -45,13 +45,13 @@ public class StoreManager : MonoBehaviour
         if (Parameter.money >= cabbageSeedCost)
         {
             Parameter.money -= cabbageSeedCost;
-            SeedInventory.Instance.AddCabbageSeed(5); // ★種を1個追加
-            Debug.Log("キャベツの種を買いました！");
+            SeedInventory.Instance.AddCabbageSeed(5); // 種をn個追加
+            Debug.Log("キャベツの種を購入");
             AudioController.Instance.PlaySE("種購入", 0.2f);
         }
         else
         {
-            Debug.Log("お金が足りません！");
+            Debug.Log("お金が足りない");
             StartCoroutine(ShowMessageController.Instance.ShowMessage(noMoneyMessage, 1.3f));
         }
     }
@@ -61,13 +61,13 @@ public class StoreManager : MonoBehaviour
         if (Parameter.money >= tomatoSeedCost)
         {
             Parameter.money -= tomatoSeedCost;
-            SeedInventory.Instance.AddTomatoSeed(10); // ★種を1個追加
-            Debug.Log("トマトの種を買いました！");
+            SeedInventory.Instance.AddTomatoSeed(10); // 種をn個追加
+            Debug.Log("トマトの種を購入");
             AudioController.Instance.PlaySE("種購入", 0.2f);
         }
         else
         {
-            Debug.Log("お金が足りません！");
+            Debug.Log("お金が足りない");
             StartCoroutine(ShowMessageController.Instance.ShowMessage(noMoneyMessage, 1.3f));
 
         }
@@ -79,11 +79,11 @@ public class StoreManager : MonoBehaviour
         {
             Parameter.money -= workerCost;
             Instantiate(workerPrefab, workerSpawnPoint.position, Quaternion.identity);
-            Debug.Log("バイトを雇いました！");
+            Debug.Log("バイトを雇った");
         }
         else
         {
-            Debug.Log("お金が足りません！");
+            Debug.Log("お金が足りない");
             StartCoroutine(ShowMessageController.Instance.ShowMessage(noMoneyMessage, 1.3f));
         }
     }

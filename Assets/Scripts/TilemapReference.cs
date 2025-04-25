@@ -5,7 +5,7 @@ public class TilemapReference : MonoBehaviour
 {
     public static TilemapReference Instance { get; private set; }
 
-    public Grid grid;          // ★ Gridへの参照を追加
+    public Grid grid;
     public Tilemap tilemap;
     public TileBase soilTile;
     public TileBase wastelandTile;

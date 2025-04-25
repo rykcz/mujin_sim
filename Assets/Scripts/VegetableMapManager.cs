@@ -20,33 +20,33 @@ public class VegetableMapManager : MonoBehaviour
             Destroy(gameObject);
     }
 
-    // ★ 登録
+    // 登録
     public void RegisterVegetable(Vector3Int cell, VegetableGrowth vegetable)
     {
         if (!vegetableMap.ContainsKey(cell))
         {
             vegetableMap.Add(cell, vegetable);
-            Debug.Log($"🌱 野菜登録: {cell}");
+            Debug.Log($"野菜登録: {cell}");
         }
     }
 
-    // ★ 削除
+    // 削除
     public void UnregisterVegetable(Vector3Int cell)
     {
         if (vegetableMap.ContainsKey(cell))
         {
             vegetableMap.Remove(cell);
-            Debug.Log($"🧹 野菜削除: {cell}");
+            Debug.Log($"野菜削除: {cell}");
         }
     }
 
-    // ★ 存在チェック
+    // 存在チェック
     public bool HasVegetable(Vector3Int cell)
     {
         return vegetableMap.ContainsKey(cell);
     }
 
-    // ★ cell位置にあるVegetableGrowthを返す
+    // cell位置にあるVegetableGrowthを返す
     public VegetableGrowth GetVegetable(Vector3Int cell)
     {
         if (vegetableMap.TryGetValue(cell, out VegetableGrowth vegetable))

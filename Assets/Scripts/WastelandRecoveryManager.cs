@@ -9,7 +9,7 @@ public class WastelandRecoveryManager : MonoBehaviour
     private class TilledCellInfo
     {
         public Vector3Int cellPos;
-        public int tilledDay; // 耕した日
+        public int tilledDay; // 耕した日数保存用
     }
 
     private List<TilledCellInfo> tilledCells = new List<TilledCellInfo>();
@@ -22,7 +22,7 @@ public class WastelandRecoveryManager : MonoBehaviour
             Destroy(gameObject);
     }
 
-    // ★耕したときに登録
+    // 耕したときに登録
     public void RegisterTilledCell(Vector3Int cell)
     {
         tilledCells.Add(new TilledCellInfo
@@ -32,7 +32,7 @@ public class WastelandRecoveryManager : MonoBehaviour
         });
     }
 
-    // ★日付が進んだときにチェック
+    // 日付が進んだときにチェック
     public void CheckAndRecoverTiles()
     {
         Tilemap tilemap = TilemapReference.Instance.tilemap;
@@ -42,10 +42,10 @@ public class WastelandRecoveryManager : MonoBehaviour
         {
             if (Parameter.day >= info.tilledDay + 2) // 2日経過したら
             {
-                // まず野菜がいるかチェック
+                // 野菜がいるかチェック
                 if (VegetableMapManager.Instance.HasVegetable(info.cellPos))
                 {
-                    Debug.Log($"🥬 土タイル上に野菜がいるので破壊します {info.cellPos}");
+                    Debug.Log($"土タイル上に野菜がいるので破壊 {info.cellPos}");
 
                     var veg = VegetableMapManager.Instance.GetVegetable(info.cellPos);
                     if (veg != null)
@@ -56,7 +56,7 @@ public class WastelandRecoveryManager : MonoBehaviour
                         VegetableMapManager.Instance.UnregisterVegetable(info.cellPos);
                         OccupiedMapManager.Instance.UnregisterCell(info.cellPos);
 
-                        AudioController.Instance.PlaySE("野菜破壊"); // 破壊音も出すなら
+                        AudioController.Instance.PlaySE("野菜破壊"); // 破壊音
                     }
                 }
 

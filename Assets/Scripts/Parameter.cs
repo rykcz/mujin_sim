@@ -3,13 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-//複数のシーンで共有する情報を管理するクラス
-//MonoBehaviourは継承しないことに注意
+// 複数のシーンで共有する情報を管理するクラス
 public static class Parameter
 {
-    // public static List<int> eventList = new List<int>(){};
-    // public static List<int> tmpEventList = new List<int>(){}; //通過した異変数表示用。タブ閉じない限り初期化しない。
-    // public static bool mouseUnlockBool = false; //これをLockMouseCursor.csでInput.GetMouseButtonDown(0) && playerObj.GetComponent<PlayerController>().hasDiedに置き換えてPCでのマウス表示させたい
     public static int money = 1000;
     public static int dayCostMoney = 600;
     public static int day = 1;

@@ -31,10 +31,9 @@ public class WorkerFadeController : MonoBehaviour
         }
 
         spriteRenderer.color = new Color(startColor.r, startColor.g, startColor.b, 0f);
-        gameObject.SetActive(false); // 完全に消す
+        gameObject.SetActive(false);
     }
 
-    // 🌅 ここ追加！フェードイン
     public void FadeIn()
     {
         StartCoroutine(FadeInRoutine());

@@ -47,19 +47,18 @@ public class AudioController : MonoBehaviour
         PlayBGM("BGM", 0.2f);
     }
 
-    // --------------------------------
-    // 🎵 SE再生（ボリューム指定あり、同じSEは同時再生させない）
+    // SE再生
     public void PlaySE(string name, float volume = 1.0f)
     {
         if (!soundDict.TryGetValue(name, out AudioClip clip))
         {
-            Debug.LogWarning($"🔇 SE '{name}' が見つかりませんでした！");
+            Debug.LogWarning($"SE '{name}' が見つかりません");
             return;
         }
 
         if (seSource.isPlaying && seSource.clip == clip)
         {
-            Debug.Log($"🔁 SE '{name}' はすでに再生中なのでスキップします");
+            Debug.Log($"SE '{name}' はすでに再生中なのでスキップ");
             return;
         }
 
@@ -68,13 +67,12 @@ public class AudioController : MonoBehaviour
         seSource.Play();
     }
 
-    // --------------------------------
-    // 🎶 BGM再生
+    // BGM再生
     public void PlayBGM(string name, float volume = 1.0f)
     {
         if (!soundDict.TryGetValue(name, out AudioClip clip))
         {
-            Debug.LogWarning($"🔇 BGM '{name}' が見つかりませんでした！");
+            Debug.LogWarning($"BGM '{name}' が見つかりません");
             return;
         }
 
@@ -88,8 +86,7 @@ public class AudioController : MonoBehaviour
         bgmSource.Play();
     }
 
-    // --------------------------------
-    // 🎶 BGM停止（即時）
+    // BGM停止
     public void StopBGMImmediate()
     {
         if (bgmSource.isPlaying)
@@ -98,8 +95,7 @@ public class AudioController : MonoBehaviour
         }
     }
 
-    // --------------------------------
-    // 🎶 BGM停止（フェードアウトあり）
+    // BGM停止（フェードアウト）
     public void StopBGMFade(float fadeDuration)
     {
         if (fadeOutCoroutine != null)

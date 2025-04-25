@@ -57,14 +57,14 @@ public class WorkerController : MonoBehaviour
 
         if (taskProgressBarFill == null)
         {
-            Debug.LogError("❌ taskProgressBarFill が見つかりません！");
+            Debug.LogError("taskProgressBarFillが見つからない");
         }
         else
         {
-            Debug.Log($"✅ taskProgressBarFill 発見: {taskProgressBarFill.name}");
+            Debug.Log($"taskProgressBarFillが見つかった: {taskProgressBarFill.name}");
         }
 
-            taskProgressBarObject.SetActive(false); // 最初は非表示にしておく
+            taskProgressBarObject.SetActive(false);
             taskProgressBarObjectBack.SetActive(false);
         }        
     }
@@ -78,20 +78,19 @@ public class WorkerController : MonoBehaviour
     {
         if (!IsInsideValidArea(task.targetCell))
         {
-            Debug.LogWarning($"⚠️ Worker: 範囲外タスクなので拒否: {task.targetCell}");
+            Debug.LogWarning($"Worker: 範囲外タスクなので拒否: {task.targetCell}");
             currentTask = null;
             isWorking = false;
             return;
         }
 
-        Debug.Log("🌾 SetTask 呼び出し");
+        Debug.Log("SetTask 呼び出し");
 
         if (isWorking)
         {
             if (currentTask != null && currentTask.taskType == TaskType.Move)
             {
-                // ⭐ Moveタスク中なら無条件で新しいタスクに切り替え
-                Debug.Log("🏃 Move中なので新しいタスクに強制切り替えます！");
+                // Moveタスク中なら新しいタスクに切り替え
                 StopAllCoroutines();
                 pathQueue.Clear();
                 isExecutingTask = false;
@@ -100,8 +99,7 @@ public class WorkerController : MonoBehaviour
             }
             else if (force)
             {
-                // ⭐ force==trueなら作業中でも強制キャンセル
-                Debug.Log("⚡ 強制タスク割り込み受け付けます！");
+                // force==trueなら作業中でも強制キャンセル
                 StopAllCoroutines();
                 pathQueue.Clear();
                 isExecutingTask = false;
@@ -110,14 +108,12 @@ public class WorkerController : MonoBehaviour
             }
             else
             {
-                // ⭐ 通常作業中なら拒否
-                Debug.LogWarning($"{gameObject.name} はまだ作業中なので、新しいタスクは受け付けません！");
+                // 通常作業中なら拒否
                 return;
             }
         }
 
-        // ★ここから普通の新タスク受け付け
-        Debug.Log("🌾 SetTask: タスク代入します");
+        Debug.Log("SetTask: タスク代入");
         currentTask = task;
         actionTargetCell = task.targetCell;
 
@@ -130,7 +126,7 @@ public class WorkerController : MonoBehaviour
 
             if (adjacentCell.x == int.MinValue)
             {
-                Debug.LogError("🌾 隣接マスが見つからなかったのでタスク受理せず終了");
+                Debug.LogError("隣接マスが見つからないのでタスク受け付けない");
                 currentTask = null;
                 return;
             }
@@ -144,14 +140,14 @@ public class WorkerController : MonoBehaviour
 
         isWorking = true;
 
-        Debug.Log("🌾 SetTask: FindPathToTargetを呼びます");
+        Debug.Log("SetTask: FindPathToTargetを呼び出し");
         FindPathToTarget();
-        Debug.Log("🌾 SetTask: 終了");
+        Debug.Log("SetTask: 終了");
         
-        // ⭐ Moveタスクだけ例外的にアイコンもバーも非表示にする
+        // Moveタスクだけ例外的にアイコンもバーも非表示にする
         if (currentTask.taskType == TaskType.Move)
         {
-            // ⭐ ここで進捗リセットとバー非表示
+            // ここで進捗リセットとバー非表示
             taskProgress = 0f;
             isProgressActive = false;
 
@@ -164,7 +160,7 @@ public class WorkerController : MonoBehaviour
         }
         else
         {
-            UpdateTaskIcon(currentTask.taskType); // ←通常はタスクアイコン更新
+            UpdateTaskIcon(currentTask.taskType); // 通常はタスクアイコン更新
         }
 
     }
@@ -188,13 +184,13 @@ public class WorkerController : MonoBehaviour
         {
             Vector3Int adjacent = targetCell + dir;
 
-            // 1. 範囲外チェック
+            // 範囲外チェック
             if (!IsInsideValidArea(adjacent)) continue;
 
-            // 2. 占有チェック
+            // 占有チェック
             if (OccupiedMapManager.Instance.IsCellOccupied(adjacent)) continue;
 
-            // 3. パスが通るかチェック
+            // パスが通るかチェック
             var testPath = SimpleAStar.FindPath(startCell, adjacent, allowOccupied: false, allowOccupiedGoal: true);
 
             if (testPath == null)
@@ -214,12 +210,12 @@ public class WorkerController : MonoBehaviour
 
         if (found)
         {
-            Debug.Log($"🌾 最短隣接セルを選択: {bestCell} (パス長さ {bestDistance})");
+            Debug.Log($"最短隣接セルを選択: {bestCell} (パス長さ {bestDistance})");
             return bestCell;
         }
         else
         {
-            Debug.LogError("🌾 隣接に到達可能な空きマスがないのでタスクキャンセルします！");
+            Debug.LogError("隣接に到達可能な空きマスがないのでタスクキャンセル");
             return Vector3Int.one * int.MinValue; // 無効な座標
         }
     }
@@ -245,11 +241,11 @@ public class WorkerController : MonoBehaviour
         {
             LookAtTargetCell();
 
-            // ⭐ ここ！！ Moveタスクなら何もしない
+            // Moveタスクなら何もしない
             if (currentTask.taskType == TaskType.Move)
             {
                 // 移動タスクなら ExecuteTaskしない
-                Debug.Log("🚶 Moveタスクなので作業実行しません。");
+                Debug.Log("Moveタスクなので作業実行しない");
                 currentTask = null;
                 isWorking = false;
                 isExecutingTask = false;
@@ -260,7 +256,7 @@ public class WorkerController : MonoBehaviour
             }
             else
             {
-                ExecuteTask(); // 🌟移動以外なら作業実行
+                ExecuteTask(); // 移動以外なら作業実行
             }
         }
     }
@@ -313,19 +309,19 @@ public class WorkerController : MonoBehaviour
 
         if (path == null)
         {
-            Debug.Log("❌ 最初のパス失敗 → リカバリモード突入");
+            Debug.Log("最初のパス失敗、リカバリモード突入");
         }
         else
         {
-            Debug.Log("✅ 最初のパス成功 → リカバリ不要");
+            Debug.Log("最初のパス成功、リカバリ不要");
         }
 
-        // ✅ 最初パス見つからなかったらリカバリ開始
+        // 最初パス見つからなかったらリカバリ開始
         if (path == null)
         {
-            Debug.LogWarning("⚠️ パス見つからないので邪魔な野菜を削除しながらリトライします");
+            Debug.LogWarning("パス見つからないので邪魔な野菜を削除しながらリトライ");
 
-            // 🥬 全野菜リストを取得
+            // 全野菜リストを取得
             List<Vector3Int> allVegetables = VegetableMapManager.Instance.GetAllVegetablePositions();
 
             // 距離が近い順にソート（より邪魔そうなものを優先）
@@ -337,14 +333,13 @@ public class WorkerController : MonoBehaviour
                 VegetableGrowth vegetable = VegetableMapManager.Instance.GetVegetable(vegCell);
                 if (vegetable != null)
                 {
-                    Debug.Log($"🥬 邪魔な野菜を破壊します: {vegCell}");
+                    Debug.Log($"邪魔な野菜を破壊: {vegCell}");
                     vegetable.MarkForDestroy();
                     Destroy(vegetable.gameObject);
 
                     VegetableMapManager.Instance.UnregisterVegetable(vegCell);
                     OccupiedMapManager.Instance.UnregisterCell(vegCell);
                     AudioController.Instance.PlaySE("野菜破壊", 0.2f);
-                    Debug.Log("野菜破壊SE");
                     removedVegetables.Add(vegCell);
                 }
 
@@ -353,7 +348,7 @@ public class WorkerController : MonoBehaviour
 
                 if (path != null)
                 {
-                    Debug.Log($"✅ 邪魔をどけたらパス発見！除去した野菜数: {removedVegetables.Count}");
+                    Debug.Log($"邪魔な野菜を除去してパス発見、破壊した野菜数: {removedVegetables.Count}");
                     break;
                 }
             }
@@ -362,11 +357,11 @@ public class WorkerController : MonoBehaviour
         if (path != null && path.Count >= 1)
         {
             pathQueue = new Queue<Vector3Int>(path);
-            Debug.Log($"🚶 パス見つかった！セル数: {path.Count}");
+            Debug.Log($"パス発見、セル数: {path.Count}");
         }
         else
         {
-            Debug.LogError("❌ どけてもパス見つかりませんでした…");
+            Debug.LogError("破壊してもパス見つからず");
             currentTask = null;
             isWorking = false;
         }
@@ -388,13 +383,13 @@ public class WorkerController : MonoBehaviour
             transform.position = targetPos;
             pathQueue.Dequeue();
 
-            if (pathQueue.Count == 0) // 🏁 ゴールに着いたとき
+            if (pathQueue.Count == 0) // ゴールに着いたとき
             {
                 Vector3Int myCell = TilemapReference.Instance.tilemap.WorldToCell(transform.position);
 
                 if (VegetableMapManager.Instance.HasVegetable(myCell))
                 {
-                    Debug.Log($"🥬 ゴール地点 {myCell} に野菜がいたので破壊します");
+                    Debug.Log($"ゴール地点 {myCell} に野菜があるので破壊");
 
                     VegetableGrowth veg = VegetableMapManager.Instance.GetVegetable(myCell);
                     if (veg != null)
@@ -405,7 +400,7 @@ public class WorkerController : MonoBehaviour
                         VegetableMapManager.Instance.UnregisterVegetable(myCell);
                         OccupiedMapManager.Instance.UnregisterCell(myCell);
 
-                        AudioController.Instance.PlaySE("野菜破壊", 0.2f); // 🔥 SEも鳴らす
+                        AudioController.Instance.PlaySE("野菜破壊", 0.2f);
                     }
                 }
             }
@@ -447,9 +442,9 @@ public class WorkerController : MonoBehaviour
             yield break;
         }
 
-        Debug.Log($"🔍 ExecuteTaskRoutineスタート タイプ: {currentTask.taskType}");
+        Debug.Log($"ExecuteTaskRoutineスタート タイプ: {currentTask.taskType}");
 
-        // まずタスクに応じてSE鳴らす
+        // タスクに応じてSE鳴らす
         switch (currentTask.taskType)
         {
             case TaskType.Till:
@@ -469,7 +464,7 @@ public class WorkerController : MonoBehaviour
 
         taskProgress = 0f;
 
-        // 🛠 ここで分岐！GoHomeなら進捗バー出さない
+        // ここで分岐、GoHomeなら進捗バー出さない
         if (currentTask.taskType != TaskType.GoHome)
         {
             isProgressActive = true;
@@ -502,11 +497,11 @@ public class WorkerController : MonoBehaviour
         while (elapsed < waitTime)
         {
             elapsed += Time.deltaTime;
-            taskProgress = Mathf.Clamp01(elapsed / waitTime);  // ★ここで更新
+            taskProgress = Mathf.Clamp01(elapsed / waitTime);
             yield return null;
         }
 
-        // 進捗完了後にバー非表示（GoHomeだった場合はもう非表示になってるからOK）
+        // 進捗完了後にバー非表示
         if (taskProgressBarObject != null)
             taskProgressBarObject.SetActive(false);
         if (taskProgressBarObjectBack != null)
@@ -529,9 +524,8 @@ public class WorkerController : MonoBehaviour
                 HarvestCrop(actionTargetCell);
                 break;
             case TaskType.Move:
-                Debug.Log("🚶 Moveタスク完了");
 
-                // ⭐ ここで進捗リセット・タスク完了扱いにする！
+                // ここで進捗リセット、タスク完了扱い
                 taskProgress = 0f;
                 isProgressActive = false;
 
@@ -542,12 +536,11 @@ public class WorkerController : MonoBehaviour
 
                 ClearTaskIcon(); // アイコンも消す
 
-                // ⭐ タスク終了処理！
                 currentTask = null;
                 isWorking = false;
                 isExecutingTask = false;
 
-                yield break; // 終了！
+                yield break;
 
             case TaskType.GoHome:
                 FadeOutAndDisable();
@@ -565,12 +558,12 @@ public class WorkerController : MonoBehaviour
     {
         if (taskProgressBarFill == null) return;
 
-        float fill = Mathf.Clamp01(taskProgress);  // ここで必ず Clamp01
+        float fill = Mathf.Clamp01(taskProgress);
 
         // スケール更新
         taskProgressBarFill.localScale = new Vector3(Mathf.Max(fill, 0.01f), 1f, 1f);
 
-        // 位置は固定！左端に揃えたまま
+        // 位置は固定で左端に揃えたまま
         taskProgressBarFill.localPosition = new Vector3(-0.35f, 0f, 0f);
     }
 
@@ -601,7 +594,6 @@ public class WorkerController : MonoBehaviour
 
             if (!SeedInventory.Instance.UseCabbageSeed())
             {
-                Debug.LogWarning("⚠️ キャベツの種が足りないのでPlant中止！");
                 return;
             }
         }
@@ -612,14 +604,12 @@ public class WorkerController : MonoBehaviour
 
             if (!SeedInventory.Instance.UseTomatoSeed())
             {
-                Debug.LogWarning("⚠️ トマトの種が足りないのでPlant中止！");
                 return;
             }
         }
 
         if (prefabToUse == null)
         {
-            Debug.LogError($"❌ PlantCrop失敗: vegetableType={vegetableType}");
             return;
         }
 
@@ -629,25 +619,24 @@ public class WorkerController : MonoBehaviour
         VegetableGrowth vg = crop.GetComponent<VegetableGrowth>();
         if (vg == null)
         {
-            Debug.LogError("❌ 野菜プレハブに VegetableGrowth が付いてない！");
             return;
         }
 
         vg.vegetableType = vegType;
 
-        // 🌱 植えた野菜をVegetableMapManagerに登録する！
+        // 植えた野菜をVegetableMapManagerに登録
         Vector3Int cellPos = TilemapReference.Instance.tilemap.WorldToCell(worldPos);
         VegetableMapManager.Instance.RegisterVegetable(cellPos, vg);
     }
 
     private void HarvestCrop(Vector3Int cell)
     {
-        Debug.Log($"🌾 HarvestCrop 実行 cell: {cell}");
+        Debug.Log($"HarvestCrop 実行 cell: {cell}");
 
         // マップから野菜情報を取得
         if (!VegetableMapManager.Instance.HasVegetable(cell))
         {
-            Debug.LogWarning("⚠️ 収穫対象がいません！");
+            Debug.LogWarning("収穫対象が存在せず");
             currentTask = null;
             isWorking = false;
             isExecutingTask = false;
@@ -658,7 +647,7 @@ public class WorkerController : MonoBehaviour
 
         if (vegetable == null)
         {
-            Debug.LogWarning("⚠️ マップには登録されているが、VegetableGrowthコンポーネントが無い！");
+            Debug.LogWarning("マップには登録されているがVegetableGrowthコンポーネントが無い");
             currentTask = null;
             isWorking = false;
             isExecutingTask = false;
@@ -668,7 +657,7 @@ public class WorkerController : MonoBehaviour
         // 成長しているか確認
         if (!vegetable.IsFullyGrown())
         {
-            Debug.LogWarning("⚠️ 成長していないので収穫できません！");
+            Debug.LogWarning("成長していないので収穫不可");
             currentTask = null;
             isWorking = false;
             isExecutingTask = false;
@@ -680,7 +669,7 @@ public class WorkerController : MonoBehaviour
 
         if (freeSlots <= 0)
         {
-            Debug.LogWarning("⚠️ 販売所に空きがないので収穫中止します！");
+            Debug.LogWarning("販売所に空きがないので収穫中止");
             currentTask = null;
             isWorking = false;
             isExecutingTask = false;
@@ -692,19 +681,17 @@ public class WorkerController : MonoBehaviour
             float randomValue = Random.value;
             int amount = 1;
 
-            if (randomValue < 0.2f) //20%
+            if (randomValue < 0.2f)
             {
                 amount = 3;
             }
-            else if (randomValue < 0.55f) //35%
+            else if (randomValue < 0.55f)
             {
                 amount = 2;
             }
 
-            // 空きがない分は捨てる
+            // 空きがない場合廃棄
             int actualHarvestAmount = Mathf.Min(amount, freeSlots);
-
-            Debug.Log($"🍅 トマトを {actualHarvestAmount} 個収穫します！（本来{amount}個）");
 
             for (int i = 0; i < actualHarvestAmount; i++)
             {
@@ -714,10 +701,10 @@ public class WorkerController : MonoBehaviour
             // 余剰分があった場合は警告
             if (actualHarvestAmount < amount)
             {
-                Debug.LogWarning($"⚠️ {amount - actualHarvestAmount} 個のトマトは販売所に置けずに廃棄されました。");
+                Debug.LogWarning($"！！　{amount - actualHarvestAmount} 個のトマトは販売所に置けずに廃棄");
             }
 
-            // アイコン表示も actualHarvestAmount を基準にする
+            // アイコン表示もactualHarvestAmountを基準にする
             if (actualHarvestAmount == 2)
             {
                 ShowPlusIcon(plus2IconPrefab);
@@ -729,18 +716,16 @@ public class WorkerController : MonoBehaviour
         }
         else
         {
-            // 🥬 キャベツなら1個
+            // キャベツなら1個
             MarketManager.Instance.AddItemToMarket(vegetable);
         }
 
-        // ★ 野菜削除
+        // 野菜削除
         vegetable.MarkForDestroy();
         VegetableMapManager.Instance.UnregisterVegetable(cell);
         OccupiedMapManager.Instance.UnregisterCell(cell);
 
         Destroy(vegetable.gameObject);
-
-        Debug.Log($"✅ 収穫成功！cell: {cell}");
 
         // タスク完了
         currentTask = null;
@@ -768,7 +753,6 @@ public class WorkerController : MonoBehaviour
 
     public void ResetTask()
     {
-        Debug.Log($"🔄 {gameObject.name}: タスクをリセットします！");
         currentTask = null;
         isWorking = false;
         isExecutingTask = false;
@@ -787,7 +771,6 @@ public class WorkerController : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("⚠️ WorkerにFadeコンポーネントが付いていません！");
             gameObject.SetActive(false);
         }
     }
@@ -844,7 +827,7 @@ public class WorkerController : MonoBehaviour
         }
 
         activePlusIcon = Instantiate(iconPrefab, transform);
-        activePlusIcon.transform.localPosition = new Vector3(0f, 1.2f, 0f); // 表示位置
+        activePlusIcon.transform.localPosition = new Vector3(0f, 1.2f, 0f);
 
         StartCoroutine(AnimateAndDestroyPlusIcon(activePlusIcon));
     }
@@ -862,7 +845,6 @@ public class WorkerController : MonoBehaviour
         SpriteRenderer sr = icon.GetComponent<SpriteRenderer>();
         if (sr == null)
         {
-            Debug.LogWarning("⚠️ PlusアイコンにSpriteRendererが付いてない！");
             yield break;
         }
 
@@ -882,7 +864,7 @@ public class WorkerController : MonoBehaviour
             yield return null;
         }
 
-        Destroy(icon); // 最後に削除
+        Destroy(icon);
     }
 
     private IEnumerator HidePlusIconAfterSeconds(float seconds)

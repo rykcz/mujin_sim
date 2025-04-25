@@ -9,8 +9,8 @@ public class GameExplanationManager : MonoBehaviour
     public Image explanationImage;         // 表示する画像
     public Sprite[] explanationPages;      // ページ画像リスト
 
-    public Button nextButton;               // 次へ進むボタン
-    public GameObject daySelectPanel;       // 日数選択ボタンをまとめたパネル
+    public Button nextButton;               // ページ送り用
+    public GameObject daySelectPanel;       // 日数選択ボタンパネル
     public Button day5Button;
     public Button day10Button;
     public Button day30Button;
@@ -58,7 +58,7 @@ public class GameExplanationManager : MonoBehaviour
     {
         if (currentPage >= explanationPages.Length)
         {
-            // 最後まで来たら日数選択パネルを表示
+            // 最後ページで日数選択パネルを表示
             daySelectPanel.SetActive(true);
             nextButton.gameObject.SetActive(false);
         }
@@ -76,9 +76,7 @@ public class GameExplanationManager : MonoBehaviour
 
     private void SelectDayCount(int days)
     {
-        Debug.Log($"🎮 選択された日数: {days}");
-
-        // ここでゲームの最大プレイ日設定
+        // 最大プレイ日設定
         Parameter.limitDay = days + 1; //最終日過ぎたら終了
         CloseExplanation();
     }
@@ -92,9 +90,7 @@ public class GameExplanationManager : MonoBehaviour
 
     public void OpenExplanationAgain()
     {
-        // ゲーム中にヘルプ開く場合
         StartExplanation();
-        //他スクリプトから呼び出す例：GameExplanationManager.Instance.OpenExplanationAgain();
     }
 
     public bool IsDuringExplanation()

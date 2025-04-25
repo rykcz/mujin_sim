@@ -1,5 +1,5 @@
 using UnityEngine;
-using TMPro; // ★ここを追加
+using TMPro;
 
 public class SeedInventory : MonoBehaviour
 {

@@ -74,7 +74,7 @@ public class GameUIManager : MonoBehaviour
 
         if (timeOfDay != lastTimeOfDay)
         {
-            // 時間帯が変わった時にSEを鳴らす
+            // 時間帯が変わった時にSE
             switch (timeOfDay)
             {
                 case "Morning":
@@ -112,7 +112,7 @@ public class GameUIManager : MonoBehaviour
                 newTargetColor = new Color(0.2f, 0.2f, 0.4f, 0.8f);
                 break;
             case "Dawn":
-                newTargetColor = new Color(0.4f, 0.7f, 1f, 0.2f); //夜明け
+                newTargetColor = new Color(0.4f, 0.7f, 1f, 0.2f);
                 break;
         }
 

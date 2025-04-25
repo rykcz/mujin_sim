@@ -14,11 +14,11 @@ public class TileHighlighter : MonoBehaviour
     {
         if (!isActive)
         {
-            highlightTilemap.ClearAllTiles(); // ★ 無効なら消す
+            highlightTilemap.ClearAllTiles(); // 無効なら消す
             return;
         }
 
-        // マウスがUIに乗ってたらハイライト非表示
+        // マウスがUI上ならハイライト非表示
         if (EventSystem.current.IsPointerOverGameObject())
         {
             highlightTilemap.SetTile(previousCell, null);
@@ -27,7 +27,6 @@ public class TileHighlighter : MonoBehaviour
 
         Vector3 mouseScreenPos = Input.mousePosition;
         
-        // 🌟 カメラのNear Clip Planeを z にセットする
         mouseScreenPos.z = Mathf.Abs(Camera.main.transform.position.z);
 
         Vector3 worldPos = Camera.main.ScreenToWorldPoint(mouseScreenPos);

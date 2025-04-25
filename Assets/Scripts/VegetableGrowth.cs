@@ -21,12 +21,12 @@ public class VegetableGrowth : MonoBehaviour
     public int cabbagePrice = 200;
     public int tomatoPrice = 100;
 
-    private float growthSpeedMultiplier = 1f; // ★成長速度の倍率（池の隣なら2倍）
+    private float growthSpeedMultiplier = 1f; // 成長速度の倍率
     private float maxGrowthTime = 10f;
     public float cabbageGrowthTime = 10f;
     public float tomatoGrowthTime = 7f;
 
-    [SerializeField] private Material flashMaterial; // ← Inspectorでセットする
+    [SerializeField] private Material flashMaterial; // インスペクターでセットする
     private Material originalMaterial;
     private bool isFlashing = false;
 
@@ -42,14 +42,14 @@ public class VegetableGrowth : MonoBehaviour
 
         Vector3Int myCell = TilemapReference.Instance.tilemap.WorldToCell(transform.position);
 
-        // 🌊 自分が池の隣なら成長速度2倍にする
+        // 池の隣なら成長速度2倍
         if (IsNearPond(myCell))
         {
             growthSpeedMultiplier = 2f;
-            Debug.Log($"💧 {gameObject.name}: 池の隣なので成長速度2倍！");
+            Debug.Log($"{gameObject.name}: 池の隣なので成長速度2倍");
         }
 
-        // 🌱 ここで野菜ごとに成長時間を設定！
+        // 野菜種別ごとに成長時間を設定
         if (vegetableType == VegetableType.Tomato)
         {
             maxGrowthTime = tomatoGrowthTime;
@@ -88,7 +88,7 @@ public class VegetableGrowth : MonoBehaviour
 
     public void NewDay()
     {
-        // ★水やりシステム撤廃！何もなし
+        // 保留
     }
 
     public bool IsFullyGrown()
@@ -114,9 +114,7 @@ public class VegetableGrowth : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 指定セルが池タイルか調べる（上下左右）
-    /// </summary>
+    // 指定セルに池タイルか隣接しているか調べる
     private bool IsNearPond(Vector3Int cell)
     {
         Vector3Int[] directions = {
@@ -131,7 +129,7 @@ public class VegetableGrowth : MonoBehaviour
             Vector3Int adjacent = cell + dir;
 
             if (TilemapReference.Instance.tilemap.GetTile(adjacent) != null &&
-                TilemapReference.Instance.tilemap.GetTile(adjacent).name == "mapchip_01_80") // ←池タイル名で判定！
+                TilemapReference.Instance.tilemap.GetTile(adjacent).name == "mapchip_01_80") // 池タイル名
             {
                 return true;
             }
@@ -153,7 +151,7 @@ public class VegetableGrowth : MonoBehaviour
                 growthBarBackObject.SetActive(false);
             }
 
-            if (!isFlashing) // ★まだフラッシュしてなかったら
+            if (!isFlashing)
             {
                 StartCoroutine(FlashWhiteEffect());
                 isFlashing = true;
@@ -163,7 +161,7 @@ public class VegetableGrowth : MonoBehaviour
 
         float fillAmount = Mathf.Clamp01(growTimer / maxGrowthTime);
 
-        // 🌱 スケール変更
+        // スケール変更
         growthBarRenderer.transform.localScale = new Vector3(Mathf.Max(fillAmount, 0.01f), 1f, 1f);
 
         growthBarRenderer.transform.localPosition = new Vector3(-0.35f, 0.55f, 0f);
@@ -175,9 +173,10 @@ public class VegetableGrowth : MonoBehaviour
 
     }
 
+    // 成長時のエフェクト
     private IEnumerator FlashWhiteEffect()
     {
-        spriteRenderer.material = flashMaterial; // 🔥 Additiveマテリアルに切り替え！
+        spriteRenderer.material = flashMaterial; // Additiveマテリアルに切り替え
 
         float flashDuration = 0.2f; // 完全白になるまでの時間
         float fadeDuration = 0.3f; // フラッシュする時間
@@ -185,13 +184,13 @@ public class VegetableGrowth : MonoBehaviour
 
         AudioController.Instance.PlaySE("野菜成長", 0.4f);
 
-        // 最初は真っ白にしておく
+        // 最初は真っ白
         yield return new WaitForSeconds(flashDuration);
 
         // 徐々にフェードさせて戻す
         Material mat = spriteRenderer.material;
         Color startColor = mat.GetColor("_Color");
-        Color endColor = new Color(1f, 1f, 1f, 0f); // 完全透明に向かう
+        Color endColor = new Color(1f, 1f, 1f, 0f); // 完全透明にしていく
 
         timer = 0f;
         while (timer < fadeDuration)
@@ -205,7 +204,7 @@ public class VegetableGrowth : MonoBehaviour
             yield return null;
         }
 
-        spriteRenderer.material = originalMaterial; // 🔙 元のマテリアルに戻す
+        spriteRenderer.material = originalMaterial; // 元のマテリアルに戻す
     }
 
 }
